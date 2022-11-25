@@ -13,6 +13,7 @@
     *(.gnu.version_r)
     *(.eh_frame)
     . = (. + 3) & ~ 3;
+#ifndef VTABLES_IN_FLASH
     /*  C++ constructor and destructor tables, properly ordered:  */
     __init_array_start = ABSOLUTE(.);
     KEEP (*crtbegin.o(.ctors))
@@ -24,6 +25,7 @@
     KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
     KEEP (*(SORT(.dtors.*)))
     KEEP (*(.dtors))
+#endif
     /*  C++ exception handlers table:  */
     __XT_EXCEPTION_DESCS__ = ABSOLUTE(.);
     *(.xt_except_desc)
