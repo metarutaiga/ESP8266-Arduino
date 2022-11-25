@@ -101,7 +101,7 @@ void ArduinoOTAClass::begin(bool useMDNS) {
 
   if (!_hostname.length()) {
     char tmp[15];
-    sprintf(tmp, "esp8266-%06x", ESP.getChipId());
+    sprintf_P(tmp, PSTR("esp8266-%06x"), ESP.getChipId());
     _hostname = tmp;
   }
   if (!_port) {
@@ -196,7 +196,7 @@ void ArduinoOTAClass::_onRx(){
       _nonce = nonce_md5.toString();
 
       char auth_req[38];
-      sprintf(auth_req, "AUTH %s", _nonce.c_str());
+      sprintf_P(auth_req, PSTR("AUTH %s"), _nonce.c_str());
       _udp_ota->append((const char *)auth_req, strlen(auth_req));
       _udp_ota->send(ota_ip, _ota_udp_port);
       _state = OTA_WAITAUTH;
@@ -229,7 +229,7 @@ void ArduinoOTAClass::_onRx(){
     if(result.equalsConstantTime(response)) {
       _state = OTA_RUNUPDATE;
     } else {
-      _udp_ota->append("Authentication Failed", 21);
+      _udp_ota->append(String(F("Authentication Failed")).c_str(), 21);
       _udp_ota->send(ota_ip, _ota_udp_port);
       if (_error_callback) _error_callback(OTA_AUTH_ERROR);
       _state = OTA_IDLE;
@@ -252,7 +252,7 @@ void ArduinoOTAClass::_runUpdate() {
     
     StreamString ss;
     Update.printError(ss);
-    _udp_ota->append("ERR: ", 5);
+    _udp_ota->append(String(F("ERR: ")).c_str(), 5);
     _udp_ota->append(ss.c_str(), ss.length());
     _udp_ota->send(ota_ip, _ota_udp_port);
     delay(100);
@@ -260,7 +260,7 @@ void ArduinoOTAClass::_runUpdate() {
     _state = OTA_IDLE;
     return;
   }
-  _udp_ota->append("OK", 2);
+  _udp_ota->append(String(F("OK")).c_str(), 2);
   _udp_ota->send(ota_ip, _ota_udp_port);
   delay(100);
 
@@ -316,7 +316,7 @@ void ArduinoOTAClass::_runUpdate() {
     // Ensure last count packet has been sent out and not combined with the final OK
     client.flush();
     delay(1000);
-    client.print("OK");
+    client.printf_P(PSTR("OK"));
     client.flush();
     delay(1000);
     client.stop();

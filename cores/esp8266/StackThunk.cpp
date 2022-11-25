@@ -45,6 +45,11 @@ uint32_t stack_thunk_refcnt = 0;
 #define _stackSize (6200/4)
 #define _stackPaint 0xdeadbeef
 
+// Prints need to use our library function to allow for file and function
+// to be safely accessed from flash. This function encapsulates snprintf()
+// [which by definition will 0-terminate] and dumping to the UART
+void ets_printf_P(const char *str, ...);
+
 /* Add a reference, and allocate the stack if necessary */
 void stack_thunk_add_ref()
 {
@@ -134,19 +139,19 @@ void stack_thunk_dump_stack()
       break;
     pos += 4;
   }
-  ets_printf(">>>stack>>>\n");
+  ets_printf_P(PSTR(">>>stack>>>\n"));
   while (pos < stack_thunk_top) {
-    ets_printf("%08x:  %08x %08x %08x %08x\n", (int32_t)pos, pos[0], pos[1], pos[2], pos[3]);
+    ets_printf_P(PSTR("%08x:  %08x %08x %08x %08x\n"), (int32_t)pos, pos[0], pos[1], pos[2], pos[3]);
     pos += 4;
   }
-  ets_printf("<<<stack<<<\n");
+  ets_printf_P(PSTR("<<<stack<<<\n"));
 }
 
 /* Called when the stack overflow is detected by a thunk.  Main memory is corrupted at this point.
  * Do not return, use libssp-compatible function to notify postmortem and immediately reboot. */
 void stack_thunk_fatal_smashing()
 {
-    ets_printf("FATAL ERROR: BSSL stack smashing detected\n");
+    ets_printf_P(PSTR("FATAL ERROR: BSSL stack smashing detected\n"));
     __stack_chk_fail();
 }
 

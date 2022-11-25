@@ -197,7 +197,7 @@ extern void __attachInterruptFunctionalArg(uint8_t pin, voidFuncPtrArg userFunc,
   if ((uint32_t)userFunc >= 0x40200000)
   {
     // ISR not in IRAM
-    ::printf((PGM_P)F("ISR not in IRAM!\r\n"));
+    printf_P(PSTR("ISR not in IRAM!\r\n"));
     abort();
   }
 

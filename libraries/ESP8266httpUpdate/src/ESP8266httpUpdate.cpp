@@ -186,7 +186,7 @@ HTTPUpdateResult ESP8266HTTPUpdate::handleUpdate(HTTPClient& http, const String&
         http.setAuthorization(_auth.c_str());
     }
 
-    const char * headerkeys[] = { "x-MD5" };
+    const char * headerkeys[] = { PSTR("x-MD5") };
     size_t headerkeyssize = sizeof(headerkeys) / sizeof(char*);
 
     // track these headers
@@ -212,8 +212,8 @@ HTTPUpdateResult ESP8266HTTPUpdate::handleUpdate(HTTPClient& http, const String&
     String md5;
     if (_md5Sum.length()) {
         md5 = _md5Sum; 
-    } else if(http.hasHeader("x-MD5")) {
-        md5 = http.header("x-MD5");
+    } else if(http.hasHeader(PSTR("x-MD5"))) {
+        md5 = http.header(PSTR("x-MD5"));
     }
     if(md5.length()) {
         DEBUG_HTTP_UPDATE("[httpUpdate]  - MD5: %s\n", md5.c_str());

@@ -145,7 +145,7 @@ typename ESP8266WebServerTemplate<ServerType>::ClientFuture ESP8266WebServerTemp
           isEncoded = true;
         } else if (headerValue.startsWith(F("multipart/"))){
           boundaryStr = headerValue.substring(headerValue.indexOf('=') + 1);
-          boundaryStr.replace("\"","");
+          boundaryStr.replace(F("\""),F(""));
           isForm = true;
         }
       } else if (headerName.equalsIgnoreCase(F("Content-Length"))){
@@ -357,7 +357,7 @@ bool ESP8266WebServerTemplate<ServerType>::_parseForm(ClientType& client, const 
 
   client.readStringUntil('\n');
   //start reading the form
-  if (line == ("--"+boundary)){
+  if (line == (F("--")+boundary)){
     if(_postArgs) delete[] _postArgs;
     _postArgs = new RequestArgument[WEBSERVER_MAX_POST_ARGS];
     _postArgsLen = 0;
@@ -402,7 +402,7 @@ bool ESP8266WebServerTemplate<ServerType>::_parseForm(ClientType& client, const 
             while(1){
               line = client.readStringUntil('\r');
               client.readStringUntil('\n');
-              if (line.startsWith("--"+boundary)) break;
+              if (line.startsWith(F("--")+boundary)) break;
               if (argValue.length() > 0) argValue += '\n';
               argValue += line;
             }
@@ -412,7 +412,7 @@ bool ESP8266WebServerTemplate<ServerType>::_parseForm(ClientType& client, const 
             arg.key = argName;
             arg.value = argValue;
 
-            if (line == ("--"+boundary+"--")){
+            if (line == (F("--")+boundary+F("--"))){
               DBGWS("Done Parsing POST\n");
               break;
             }
@@ -432,7 +432,7 @@ bool ESP8266WebServerTemplate<ServerType>::_parseForm(ClientType& client, const 
 
             int fastBoundaryLen = 4 /* \r\n-- */ + boundary.length() + 1 /* \0 */;
             char fastBoundary[ fastBoundaryLen ];
-            snprintf(fastBoundary, fastBoundaryLen, "\r\n--%s", boundary.c_str());
+            snprintf_P(fastBoundary, fastBoundaryLen, PSTR("\r\n--%s"), boundary.c_str());
             int boundaryPtr = 0;
             while ( true ) {
                 int ret = _uploadReadByte(client);
@@ -477,7 +477,7 @@ bool ESP8266WebServerTemplate<ServerType>::_parseForm(ClientType& client, const 
             if (!client.connected()) return _parseFormUploadAborted();
             line = client.readStringUntil('\r');
             client.readStringUntil('\n');
-            if (line == "--") {     // extra two dashes mean we reached the end of all form fields
+            if (line == F("--")) {     // extra two dashes mean we reached the end of all form fields
                 DBGWS("Done Parsing POST\n");
                 break;
             }
@@ -517,7 +517,12 @@ template <typename ServerType>
 String ESP8266WebServerTemplate<ServerType>::urlDecode(const String& text)
 {
   String decoded;
-  char temp[] = "0x00";
+  char temp[5];
+  temp[0] = '0';
+  temp[1] = 'x';
+  temp[2] = '0';
+  temp[3] = '0';
+  temp[4] = 0;
   unsigned int len = text.length();
   unsigned int i = 0;
   while (i < len)

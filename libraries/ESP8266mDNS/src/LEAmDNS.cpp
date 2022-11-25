@@ -231,10 +231,10 @@ namespace MDNSImplementation
         hMDNSService hResult = 0;
 
         if (((!p_pcName) ||  // NO name OR
-             (MDNS_DOMAIN_LABEL_MAXLENGTH >= os_strlen(p_pcName)))
+             (MDNS_DOMAIN_LABEL_MAXLENGTH >= strlen_P(p_pcName)))
             &&  // Fitting name
-            (p_pcService) && (MDNS_SERVICE_NAME_LENGTH >= os_strlen(p_pcService)) && (p_pcProtocol)
-            && ((MDNS_SERVICE_PROTOCOL_LENGTH - 1) != os_strlen(p_pcProtocol)) && (p_u16Port))
+            (p_pcService) && (MDNS_SERVICE_NAME_LENGTH >= strlen_P(p_pcService)) && (p_pcProtocol)
+            && ((MDNS_SERVICE_PROTOCOL_LENGTH - 1) != strlen_P(p_pcProtocol)) && (p_u16Port))
         {
             if (!_findService((p_pcName ?: m_pcHostname), p_pcService,
                               p_pcProtocol))  // Not already used
@@ -305,7 +305,7 @@ namespace MDNSImplementation
     {
         stcMDNSService* pService = 0;
         bool            bResult
-            = (((!p_pcInstanceName) || (MDNS_DOMAIN_LABEL_MAXLENGTH >= os_strlen(p_pcInstanceName)))
+            = (((!p_pcInstanceName) || (MDNS_DOMAIN_LABEL_MAXLENGTH >= strlen_P(p_pcInstanceName)))
                && ((pService = _findService(p_hService))) && (pService->setName(p_pcInstanceName))
                && ((pService->m_ProbeInformation.m_ProbingStatus = ProbingStatus_ReadyToStart)));
         DEBUG_EX_ERR(if (!bResult) {
@@ -353,7 +353,7 @@ namespace MDNSImplementation
     {
         char acBuffer[32];
         *acBuffer = 0;
-        sprintf(acBuffer, "%u", p_u32Value);
+        sprintf_P(acBuffer, PSTR("%u"), p_u32Value);
 
         return addServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -367,7 +367,7 @@ namespace MDNSImplementation
     {
         char acBuffer[16];
         *acBuffer = 0;
-        sprintf(acBuffer, "%hu", p_u16Value);
+        sprintf_P(acBuffer, PSTR("%hu"), p_u16Value);
 
         return addServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -381,7 +381,7 @@ namespace MDNSImplementation
     {
         char acBuffer[8];
         *acBuffer = 0;
-        sprintf(acBuffer, "%hhu", p_u8Value);
+        sprintf_P(acBuffer, PSTR("%hhu"), p_u8Value);
 
         return addServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -395,7 +395,7 @@ namespace MDNSImplementation
     {
         char acBuffer[32];
         *acBuffer = 0;
-        sprintf(acBuffer, "%i", p_i32Value);
+        sprintf_P(acBuffer, PSTR("%i"), p_i32Value);
 
         return addServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -409,7 +409,7 @@ namespace MDNSImplementation
     {
         char acBuffer[16];
         *acBuffer = 0;
-        sprintf(acBuffer, "%hi", p_i16Value);
+        sprintf_P(acBuffer, PSTR("%hi"), p_i16Value);
 
         return addServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -423,7 +423,7 @@ namespace MDNSImplementation
     {
         char acBuffer[8];
         *acBuffer = 0;
-        sprintf(acBuffer, "%hhi", p_i8Value);
+        sprintf_P(acBuffer, PSTR("%hhi"), p_i8Value);
 
         return addServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -596,7 +596,7 @@ namespace MDNSImplementation
     {
         char acBuffer[32];
         *acBuffer = 0;
-        sprintf(acBuffer, "%u", p_u32Value);
+        sprintf_P(acBuffer, PSTR("%u"), p_u32Value);
 
         return addDynamicServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -610,7 +610,7 @@ namespace MDNSImplementation
     {
         char acBuffer[16];
         *acBuffer = 0;
-        sprintf(acBuffer, "%hu", p_u16Value);
+        sprintf_P(acBuffer, PSTR("%hu"), p_u16Value);
 
         return addDynamicServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -624,7 +624,7 @@ namespace MDNSImplementation
     {
         char acBuffer[8];
         *acBuffer = 0;
-        sprintf(acBuffer, "%hhu", p_u8Value);
+        sprintf_P(acBuffer, PSTR("%hhu"), p_u8Value);
 
         return addDynamicServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -638,7 +638,7 @@ namespace MDNSImplementation
     {
         char acBuffer[32];
         *acBuffer = 0;
-        sprintf(acBuffer, "%i", p_i32Value);
+        sprintf_P(acBuffer, PSTR("%i"), p_i32Value);
 
         return addDynamicServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -652,7 +652,7 @@ namespace MDNSImplementation
     {
         char acBuffer[16];
         *acBuffer = 0;
-        sprintf(acBuffer, "%hi", p_i16Value);
+        sprintf_P(acBuffer, PSTR("%hi"), p_i16Value);
 
         return addDynamicServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -666,7 +666,7 @@ namespace MDNSImplementation
     {
         char acBuffer[8];
         *acBuffer = 0;
-        sprintf(acBuffer, "%hhi", p_i8Value);
+        sprintf_P(acBuffer, PSTR("%hhi"), p_i8Value);
 
         return addDynamicServiceTxt(p_hService, p_pcKey, acBuffer);
     }
@@ -701,7 +701,7 @@ namespace MDNSImplementation
         uint32_t u32Result = 0;
 
         stcMDNSServiceQuery* pServiceQuery = 0;
-        if ((p_pcService) && (os_strlen(p_pcService)) && (p_pcProtocol) && (os_strlen(p_pcProtocol))
+        if ((p_pcService) && (strlen_P(p_pcService)) && (p_pcProtocol) && (strlen_P(p_pcProtocol))
             && (p_u16Timeout) && (_removeLegacyServiceQuery())
             && ((pServiceQuery = _allocServiceQuery()))
             && (_buildDomainForService(p_pcService, p_pcProtocol,
@@ -863,7 +863,7 @@ namespace MDNSImplementation
         hMDNSServiceQuery hResult = 0;
 
         stcMDNSServiceQuery* pServiceQuery = 0;
-        if ((p_pcService) && (os_strlen(p_pcService)) && (p_pcProtocol) && (os_strlen(p_pcProtocol))
+        if ((p_pcService) && (strlen_P(p_pcService)) && (p_pcProtocol) && (strlen_P(p_pcProtocol))
             && (p_fnCallback) && ((pServiceQuery = _allocServiceQuery()))
             && (_buildDomainForService(p_pcService, p_pcProtocol,
                                        pServiceQuery->m_ServiceTypeDomain)))
@@ -1267,13 +1267,13 @@ namespace MDNSImplementation
     MDNSResponder::hMDNSService MDNSResponder::enableArduino(uint16_t p_u16Port,
                                                              bool     p_bAuthUpload /*= false*/)
     {
-        hMDNSService hService = addService(0, "arduino", "tcp", p_u16Port);
+        hMDNSService hService = addService(0, PSTR("arduino"), PSTR("tcp"), p_u16Port);
         if (hService)
         {
-            if ((!addServiceTxt(hService, "tcp_check", "no"))
-                || (!addServiceTxt(hService, "ssh_upload", "no"))
-                || (!addServiceTxt(hService, "board", ARDUINO_BOARD_ID))
-                || (!addServiceTxt(hService, "auth_upload", (p_bAuthUpload) ? "yes" : "no")))
+            if ((!addServiceTxt(hService, PSTR("tcp_check"), PSTR("no")))
+                || (!addServiceTxt(hService, PSTR("ssh_upload"), PSTR("no")))
+                || (!addServiceTxt(hService, PSTR("board"), PSTR(ARDUINO_BOARD_ID)))
+                || (!addServiceTxt(hService, PSTR("auth_upload"), (p_bAuthUpload) ? PSTR("yes") : PSTR("no"))))
             {
                 removeService(hService);
                 hService = 0;

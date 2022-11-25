@@ -79,12 +79,12 @@ bool HTTPClient::begin(WiFiClient &client, const String& url) {
 
     String protocol = url.substring(0, index);
     protocol.toLowerCase();
-    if(protocol != "http" && protocol != "https") {
+    if(protocol != F("http") && protocol != F("https")) {
         DEBUG_HTTPCLIENT("[HTTP-Client][begin] unknown protocol '%s'\n", protocol.c_str());
         return false;
     }
 
-    _port = (protocol == "https" ? 443 : 80);
+    _port = (protocol == F("https") ? 443 : 80);
     _client = client.clone();
 
     return beginInternal(url, protocol.c_str());
@@ -115,7 +115,7 @@ bool HTTPClient::begin(WiFiClient &client, const String& host, uint16_t port, co
     _host = host;
     _port = port;
     _uri = uri;
-    _protocol = (https ? "https" : "http");
+    _protocol = (https ? F("https") : F("http"));
     return true;
 }
 
@@ -138,10 +138,10 @@ bool HTTPClient::beginInternal(const String& __url, const char* expectedProtocol
     _protocol.toLowerCase();
     url.remove(0, (index + 3)); // remove http:// or https://
 
-    if (_protocol == "http") {
+    if (_protocol == F("http")) {
         // set default port for 'http'
         _port = 80;
-    } else if (_protocol == "https") {
+    } else if (_protocol == F("https")) {
         // set default port for 'https'
         _port = 443;
     } else {
@@ -367,7 +367,7 @@ void HTTPClient::useHTTP10(bool useHTTP10)
  */
 int HTTPClient::GET()
 {
-    return sendRequest("GET");
+    return sendRequest(PSTR("GET"));
 }
 /**
  * send a DELETE request
@@ -375,7 +375,7 @@ int HTTPClient::GET()
  */
 int HTTPClient::DELETE()
 {
-    return sendRequest("DELETE");
+    return sendRequest(PSTR("DELETE"));
 }
 
 /**
@@ -386,7 +386,7 @@ int HTTPClient::DELETE()
  */
 int HTTPClient::POST(const uint8_t* payload, size_t size)
 {
-    return sendRequest("POST", payload, size);
+    return sendRequest(PSTR("POST"), payload, size);
 }
 
 int HTTPClient::POST(const String& payload)
@@ -401,7 +401,7 @@ int HTTPClient::POST(const String& payload)
  * @return http code
  */
 int HTTPClient::PUT(const uint8_t* payload, size_t size) {
-    return sendRequest("PUT", payload, size);
+    return sendRequest(PSTR("PUT"), payload, size);
 }
 
 int HTTPClient::PUT(const String& payload) {
@@ -415,7 +415,7 @@ int HTTPClient::PUT(const String& payload) {
  * @return http code
  */
 int HTTPClient::PATCH(const uint8_t * payload, size_t size) {
-    return sendRequest("PATCH", payload, size);
+    return sendRequest(PSTR("PATCH"), payload, size);
 }
 
 int HTTPClient::PATCH(const String& payload) {
@@ -496,8 +496,8 @@ int HTTPClient::sendRequest(const char * type, const uint8_t * payload, size_t s
                         // (the RFC require user to accept the redirection)
                         _followRedirects == HTTPC_FORCE_FOLLOW_REDIRECTS ||
                         // allow GET and HEAD methods without force
-                        !strcmp(type, "GET") || 
-                        !strcmp(type, "HEAD")
+                        !strcmp_P(type, PSTR("GET")) || 
+                        !strcmp_P(type, PSTR("HEAD"))
                     ) {
                         redirectCount += 1;
                         DEBUG_HTTPCLIENT("[HTTP-Client][sendRequest] following redirect (the same method): '%s' redirCount: %d\n", _location.c_str(), redirectCount);
@@ -523,7 +523,7 @@ int HTTPClient::sendRequest(const char * type, const uint8_t * payload, size_t s
                         break;
                     }
                     // redirect after changing method to GET/HEAD and dropping payload
-                    type = "GET";
+                    type = PSTR("GET");
                     payload = nullptr;
                     size = 0;
                     redirect = true;
@@ -802,7 +802,7 @@ void HTTPClient::addHeader(const String& name, const String& value, bool first, 
         String headerLine;
         headerLine.reserve(name.length() + value.length() + 4);
         headerLine += name;
-        headerLine += ": ";
+        headerLine += F(": ");
 
         if (replace) {
             int headerStart = _headers.indexOf(headerLine);

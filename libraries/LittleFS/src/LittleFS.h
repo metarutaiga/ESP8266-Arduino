@@ -598,7 +598,7 @@ public:
         nameLen += _dirPath.get() ? strlen(_dirPath.get()) : 0;
         nameLen += strlen(_dirent.name);
         char tmpName[nameLen];
-        snprintf(tmpName, nameLen, "%s%s%s", _dirPath.get() ? _dirPath.get() : "", _dirPath.get()&&_dirPath.get()[0]?"/":"", _dirent.name);
+        snprintf_P(tmpName, nameLen, PSTR("%s%s%s"), _dirPath.get() ? _dirPath.get() : "", _dirPath.get()&&_dirPath.get()[0]?"/":"", _dirent.name);
         auto ret = _fs->open((const char *)tmpName, openMode, accessMode);
         return ret;
     }
@@ -693,7 +693,7 @@ protected:
         nameLen += _dirPath.get() ? strlen(_dirPath.get()) : 0;
         nameLen += strlen(_dirent.name);
         char tmpName[nameLen];
-        snprintf(tmpName, nameLen, "%s%s%s", _dirPath.get() ? _dirPath.get() : "", _dirPath.get()&&_dirPath.get()[0]?"/":"", _dirent.name);
+        snprintf_P(tmpName, nameLen, PSTR("%s%s%s"), _dirPath.get() ? _dirPath.get() : "", _dirPath.get()&&_dirPath.get()[0]?"/":"", _dirent.name);
         int rc = lfs_getattr(_fs->getFS(), tmpName, attr, dest, len);
         return (rc == len);
     }

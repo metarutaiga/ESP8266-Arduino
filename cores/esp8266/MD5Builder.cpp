@@ -84,7 +84,7 @@ void MD5Builder::getBytes(uint8_t * output) const {
 
 void MD5Builder::getChars(char * output) const {
     for (uint8_t i=0; i<16; i++){
-        sprintf(output + (i * 2), "%02x", _buf[i]);
+        sprintf_P(output + (i * 2), PSTR("%02x"), _buf[i]);
     }
 }
 

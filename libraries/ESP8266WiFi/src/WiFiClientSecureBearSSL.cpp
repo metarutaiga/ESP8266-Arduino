@@ -1402,7 +1402,7 @@ int WiFiClientSecureCtx::getLastSSLError(char *dest, size_t len) {
   }
   if (dest) {
     // snprintf is PSTR safe and guaranteed to 0-terminate
-    snprintf(dest, len, "%s%s%s", recv_fatal, send_fatal, t);
+    snprintf_P(dest, len, PSTR("%s%s%s"), recv_fatal, send_fatal, t);
   }
   return err;
 }

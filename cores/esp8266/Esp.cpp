@@ -253,7 +253,7 @@ String EspClass::getCoreVersion()
         return String(core_release);
     }
     char buf[12];
-    snprintf(buf, sizeof(buf), "%08x", core_version);
+    snprintf_P(buf, sizeof(buf), PSTR("%08x"), core_version);
     return String(buf);
 }
 

@@ -130,7 +130,7 @@ namespace MDNSImplementation
         {
             if (allocKey(p_stLength))
             {
-                strncpy(m_pcKey, p_pcKey, p_stLength);
+                strncpy_P(m_pcKey, p_pcKey, p_stLength);
                 m_pcKey[p_stLength] = 0;
                 bResult             = true;
             }
@@ -143,7 +143,7 @@ namespace MDNSImplementation
     */
     bool MDNSResponder::stcMDNSServiceTxt::setKey(const char* p_pcKey)
     {
-        return setKey(p_pcKey, (p_pcKey ? strlen(p_pcKey) : 0));
+        return setKey(p_pcKey, (p_pcKey ? strlen_P(p_pcKey) : 0));
     }
 
     /*
@@ -184,7 +184,7 @@ namespace MDNSImplementation
         {
             if (allocValue(p_stLength))
             {
-                strncpy(m_pcValue, p_pcValue, p_stLength);
+                strncpy_P(m_pcValue, p_pcValue, p_stLength);
                 m_pcValue[p_stLength] = 0;
                 bResult               = true;
             }
@@ -201,7 +201,7 @@ namespace MDNSImplementation
     */
     bool MDNSResponder::stcMDNSServiceTxt::setValue(const char* p_pcValue)
     {
-        return setValue(p_pcValue, (p_pcValue ? strlen(p_pcValue) : 0));
+        return setValue(p_pcValue, (p_pcValue ? strlen_P(p_pcValue) : 0));
     }
 
     /*
@@ -245,9 +245,9 @@ namespace MDNSImplementation
         size_t stLength = 0;
         if (m_pcKey)
         {
-            stLength += strlen(m_pcKey);                      // Key
+            stLength += strlen_P(m_pcKey);                      // Key
             stLength += 1;                                    // '='
-            stLength += (m_pcValue ? strlen(m_pcValue) : 0);  // Value
+            stLength += (m_pcValue ? strlen_P(m_pcValue) : 0);  // Value
         }
         return stLength;
     }
@@ -395,7 +395,7 @@ namespace MDNSImplementation
 
         for (stcMDNSServiceTxt* pTxt = m_pTxts; pTxt; pTxt = pTxt->m_pNext)
         {
-            if ((p_pcKey) && (0 == strcmp(pTxt->m_pcKey, p_pcKey)))
+            if ((p_pcKey) && (0 == strcmp_P(pTxt->m_pcKey, p_pcKey)))
             {
                 pResult = pTxt;
                 break;
@@ -414,7 +414,7 @@ namespace MDNSImplementation
 
         for (const stcMDNSServiceTxt* pTxt = m_pTxts; pTxt; pTxt = pTxt->m_pNext)
         {
-            if ((p_pcKey) && (0 == strcmp(pTxt->m_pcKey, p_pcKey)))
+            if ((p_pcKey) && (0 == strcmp_P(pTxt->m_pcKey, p_pcKey)))
             {
                 pResult = pTxt;
                 break;
@@ -484,19 +484,19 @@ namespace MDNSImplementation
             for (stcMDNSServiceTxt* pTxt = m_pTxts; ((bResult) && (pTxt)); pTxt = pTxt->m_pNext)
             {
                 size_t stLength;
-                if ((bResult = (0 != (stLength = (pTxt->m_pcKey ? strlen(pTxt->m_pcKey) : 0)))))
+                if ((bResult = (0 != (stLength = (pTxt->m_pcKey ? strlen_P(pTxt->m_pcKey) : 0)))))
                 {
                     if (pTxt != m_pTxts)
                     {
                         *p_pcBuffer++ = ';';
                     }
-                    strncpy(p_pcBuffer, pTxt->m_pcKey, stLength);
+                    strncpy_P(p_pcBuffer, pTxt->m_pcKey, stLength);
                     p_pcBuffer[stLength] = 0;
                     p_pcBuffer += stLength;
                     *p_pcBuffer++ = '=';
-                    if ((stLength = (pTxt->m_pcValue ? strlen(pTxt->m_pcValue) : 0)))
+                    if ((stLength = (pTxt->m_pcValue ? strlen_P(pTxt->m_pcValue) : 0)))
                     {
-                        strncpy(p_pcBuffer, pTxt->m_pcValue, stLength);
+                        strncpy_P(p_pcBuffer, pTxt->m_pcValue, stLength);
                         p_pcBuffer[stLength] = 0;
                         p_pcBuffer += stLength;
                     }
@@ -533,14 +533,14 @@ namespace MDNSImplementation
             {
                 *(unsigned char*)p_pcBuffer++ = pTxt->length();
                 size_t stLength;
-                if ((bResult = (0 != (stLength = (pTxt->m_pcKey ? strlen(pTxt->m_pcKey) : 0)))))
+                if ((bResult = (0 != (stLength = (pTxt->m_pcKey ? strlen_P(pTxt->m_pcKey) : 0)))))
                 {
-                    memcpy(p_pcBuffer, pTxt->m_pcKey, stLength);
+                    memcpy_P(p_pcBuffer, pTxt->m_pcKey, stLength);
                     p_pcBuffer += stLength;
                     *p_pcBuffer++ = '=';
-                    if ((stLength = (pTxt->m_pcValue ? strlen(pTxt->m_pcValue) : 0)))
+                    if ((stLength = (pTxt->m_pcValue ? strlen_P(pTxt->m_pcValue) : 0)))
                     {
-                        memcpy(p_pcBuffer, pTxt->m_pcValue, stLength);
+                        memcpy_P(p_pcBuffer, pTxt->m_pcValue, stLength);
                         p_pcBuffer += stLength;
                     }
                 }
@@ -566,8 +566,8 @@ namespace MDNSImplementation
             {
                 const stcMDNSServiceTxt* pOtherTxt = p_Other.find(pTxt->m_pcKey);
                 bResult = ((pOtherTxt) && (pTxt->m_pcValue) && (pOtherTxt->m_pcValue)
-                           && (strlen(pTxt->m_pcValue) == strlen(pOtherTxt->m_pcValue))
-                           && (0 == strcmp(pTxt->m_pcValue, pOtherTxt->m_pcValue)));
+                           && (strlen_P(pTxt->m_pcValue) == strlen_P(pOtherTxt->m_pcValue))
+                           && (0 == strcmp_P(pTxt->m_pcValue, pOtherTxt->m_pcValue)));
             }
             // Compare B->A
             for (const stcMDNSServiceTxt* pOtherTxt = p_Other.m_pTxts; ((bResult) && (pOtherTxt));
@@ -575,8 +575,8 @@ namespace MDNSImplementation
             {
                 const stcMDNSServiceTxt* pTxt = find(pOtherTxt->m_pcKey);
                 bResult = ((pTxt) && (pOtherTxt->m_pcValue) && (pTxt->m_pcValue)
-                           && (strlen(pOtherTxt->m_pcValue) == strlen(pTxt->m_pcValue))
-                           && (0 == strcmp(pOtherTxt->m_pcValue, pTxt->m_pcValue)));
+                           && (strlen_P(pOtherTxt->m_pcValue) == strlen_P(pTxt->m_pcValue))
+                           && (0 == strcmp_P(pOtherTxt->m_pcValue, pTxt->m_pcValue)));
             }
         }
         return bResult;
@@ -659,7 +659,7 @@ namespace MDNSImplementation
     {
         if (&p_Other != this)
         {
-            memcpy(m_acName, p_Other.m_acName, sizeof(m_acName));
+            memcpy_P(m_acName, p_Other.m_acName, sizeof(m_acName));
             m_u16NameLength = p_Other.m_u16NameLength;
         }
         return *this;
@@ -683,7 +683,7 @@ namespace MDNSImplementation
     {
         bool bResult = false;
 
-        size_t stLength = (p_pcLabel ? (strlen(p_pcLabel) + (p_bPrependUnderline ? 1 : 0)) : 0);
+        size_t stLength = (p_pcLabel ? (strlen_P(p_pcLabel) + (p_bPrependUnderline ? 1 : 0)) : 0);
         if ((MDNS_DOMAIN_LABEL_MAXLENGTH >= stLength)
             && (MDNS_DOMAIN_MAXLENGTH >= (m_u16NameLength + (1 + stLength))))
         {
@@ -698,7 +698,7 @@ namespace MDNSImplementation
                     m_acName[m_u16NameLength++] = '_';
                     --stLength;
                 }
-                strncpy(&(m_acName[m_u16NameLength]), p_pcLabel, stLength);
+                strncpy_P(&(m_acName[m_u16NameLength]), p_pcLabel, stLength);
                 m_acName[m_u16NameLength + stLength] = 0;
                 m_u16NameLength += stLength;
             }
@@ -720,7 +720,7 @@ namespace MDNSImplementation
             const char* pO = p_Other.m_acName;
             while ((pT) && (pO) && (*((unsigned char*)pT) == *((unsigned char*)pO))
                    &&  // Same length AND
-                   (0 == strncasecmp((pT + 1), (pO + 1), *((unsigned char*)pT))))  // Same content
+                   (0 == strncasecmp_P((pT + 1), (pO + 1), *((unsigned char*)pT))))  // Same content
             {
                 if (*((unsigned char*)pT))  // Not 0
                 {
@@ -791,7 +791,7 @@ namespace MDNSImplementation
             unsigned char* pucLabelLength = (unsigned char*)m_acName;
             while (*pucLabelLength)
             {
-                memcpy(p_pcBuffer, (const char*)(pucLabelLength + 1), *pucLabelLength);
+                memcpy_P(p_pcBuffer, (const char*)(pucLabelLength + 1), *pucLabelLength);
                 p_pcBuffer += *pucLabelLength;
                 pucLabelLength += (*pucLabelLength + 1);
                 *p_pcBuffer++ = (*pucLabelLength ? '.' : '\0');
@@ -1239,12 +1239,12 @@ namespace MDNSImplementation
         bool bResult = false;
 
         releaseName();
-        size_t stLength = (p_pcName ? strlen(p_pcName) : 0);
+        size_t stLength = (p_pcName ? strlen_P(p_pcName) : 0);
         if (stLength)
         {
             if ((bResult = (0 != (m_pcName = new char[stLength + 1]))))
             {
-                strncpy(m_pcName, p_pcName, stLength);
+                strncpy_P(m_pcName, p_pcName, stLength);
                 m_pcName[stLength] = 0;
             }
         }
@@ -1276,12 +1276,12 @@ namespace MDNSImplementation
         bool bResult = false;
 
         releaseService();
-        size_t stLength = (p_pcService ? strlen(p_pcService) : 0);
+        size_t stLength = (p_pcService ? strlen_P(p_pcService) : 0);
         if (stLength)
         {
             if ((bResult = (0 != (m_pcService = new char[stLength + 1]))))
             {
-                strncpy(m_pcService, p_pcService, stLength);
+                strncpy_P(m_pcService, p_pcService, stLength);
                 m_pcService[stLength] = 0;
             }
         }
@@ -1313,12 +1313,12 @@ namespace MDNSImplementation
         bool bResult = false;
 
         releaseProtocol();
-        size_t stLength = (p_pcProtocol ? strlen(p_pcProtocol) : 0);
+        size_t stLength = (p_pcProtocol ? strlen_P(p_pcProtocol) : 0);
         if (stLength)
         {
             if ((bResult = (0 != (m_pcProtocol = new char[stLength + 1]))))
             {
-                strncpy(m_pcProtocol, p_pcProtocol, stLength);
+                strncpy_P(m_pcProtocol, p_pcProtocol, stLength);
                 m_pcProtocol[stLength] = 0;
             }
         }

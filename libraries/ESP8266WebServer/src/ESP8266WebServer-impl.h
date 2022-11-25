@@ -440,7 +440,7 @@ void ESP8266WebServerTemplate<ServerType>::_prepareHeader(String& response, int 
       sendHeader(String(F("Transfer-Encoding")),String(F("chunked")));
     }
     if (_corsEnabled) {
-      sendHeader(String(F("Access-Control-Allow-Origin")), String("*"));
+      sendHeader(String(F("Access-Control-Allow-Origin")), String(F("*")));
     }
 
     if (_keepAlive && _server.hasClient()) { // Disable keep alive if another client is waiting.
@@ -510,7 +510,7 @@ void ESP8266WebServerTemplate<ServerType>::sendContent(Stream* content, ssize_t 
   if (content_length <= 0)
     content_length = std::max((ssize_t)0, content->streamRemaining());
   if(_chunked) {
-    _currentClient.printf("%zx\r\n", content_length);
+    _currentClient.printf_P(PSTR("%zx\r\n"), content_length);
   }
   ssize_t sent = content->sendSize(&_currentClient, content_length);
   if (sent != content_length)

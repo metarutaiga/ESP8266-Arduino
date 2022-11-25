@@ -43,19 +43,19 @@ namespace MDNSImplementation
     /**
         CONST STRINGS
     */
-    static const char* scpcLocal    = "local";
-    static const char* scpcServices = "services";
-    static const char* scpcDNSSD    = "dns-sd";
-    static const char* scpcUDP      = "udp";
+    static const char scpcLocal[] PROGMEM    = "local";
+    static const char scpcServices[] PROGMEM = "services";
+    static const char scpcDNSSD[] PROGMEM    = "dns-sd";
+    static const char scpcUDP[] PROGMEM      = "udp";
     // static const char*                    scpcTCP                 = "tcp";
 
 #ifdef MDNS_IP4_SUPPORT
-    static const char* scpcReverseIP4Domain = "in-addr";
+    static const char scpcReverseIP4Domain[] PROGMEM = "in-addr";
 #endif
 #ifdef MDNS_IP6_SUPPORT
-    static const char* scpcReverseIP6Domain = "ip6";
+    static const char scpcReverseIP6Domain[] PROGMEM = "ip6";
 #endif
-    static const char* scpcReverseTopDomain = "arpa";
+    static const char scpcReverseTopDomain[] PROGMEM = "arpa";
 
     /**
         TRANSFER
@@ -663,12 +663,12 @@ namespace MDNSImplementation
                                 uint8_t     u8MaxLength
                                 = ((ucLength > (sizeof(sacBuffer) - 1)) ? (sizeof(sacBuffer) - 1)
                                                                         : ucLength);
-                                os_strncpy(sacBuffer, (const char*)pucCursor, u8MaxLength);
+                                strncpy_P(sacBuffer, (const char*)pucCursor, u8MaxLength);
                                 sacBuffer[u8MaxLength] = 0; DEBUG_OUTPUT.printf_P(
                                     PSTR("[MDNSResponder] _readRRAnswerTXT: Item(%u): %s\n"),
                                     ucLength, sacBuffer););
 
-                            unsigned char* pucEqualSign = (unsigned char*)os_strchr(
+                            unsigned char* pucEqualSign = (unsigned char*)strchr(
                                 (const char*)pucCursor, '=');  // Position of the '=' sign
                             unsigned char ucKeyLength;
                             if ((pucEqualSign) && ((ucKeyLength = (pucEqualSign - pucCursor))))
@@ -1717,19 +1717,19 @@ namespace MDNSImplementation
                 bResult = ((_udpAppendBuffer((unsigned char*)&ucLengthByte, sizeof(ucLengthByte)))
                            &&  // Length
                            (p_rSendParameter.shiftOffset(sizeof(ucLengthByte)))
-                           && ((size_t)os_strlen(pTxt->m_pcKey)
-                               == m_pUDPContext->append(pTxt->m_pcKey, os_strlen(pTxt->m_pcKey)))
+                           && ((size_t)strlen_P(pTxt->m_pcKey)
+                               == m_pUDPContext->append(pTxt->m_pcKey, strlen_P(pTxt->m_pcKey)))
                            &&  // Key
-                           (p_rSendParameter.shiftOffset((size_t)os_strlen(pTxt->m_pcKey)))
+                           (p_rSendParameter.shiftOffset((size_t)strlen_P(pTxt->m_pcKey)))
                            && (1 == m_pUDPContext->append("=", 1)) &&  // =
                            (p_rSendParameter.shiftOffset(1))
                            && ((!pTxt->m_pcValue)
-                               || (((size_t)os_strlen(pTxt->m_pcValue)
+                               || (((size_t)strlen_P(pTxt->m_pcValue)
                                     == m_pUDPContext->append(pTxt->m_pcValue,
-                                                             os_strlen(pTxt->m_pcValue)))
+                                                             strlen_P(pTxt->m_pcValue)))
                                    &&  // Value
                                    (p_rSendParameter.shiftOffset(
-                                       (size_t)os_strlen(pTxt->m_pcValue))))));
+                                       (size_t)strlen_P(pTxt->m_pcValue))))));
 
                 DEBUG_EX_ERR(if (!bResult) {
                     DEBUG_OUTPUT.printf_P(

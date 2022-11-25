@@ -86,7 +86,7 @@ extern void custom_crash_callback( struct rst_info * rst_info, uint32_t stack, u
 // Prints need to use our library function to allow for file and function
 // to be safely accessed from flash. This function encapsulates snprintf()
 // [which by definition will 0-terminate] and dumping to the UART
-static void ets_printf_P(const char *str, ...) {
+void ets_printf_P(const char *str, ...) {
     char destStr[160];
     char *c = destStr;
     va_list argPtr;

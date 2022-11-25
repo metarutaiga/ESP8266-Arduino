@@ -498,7 +498,7 @@ namespace MDNSImplementation
             {
                 bool operator()(char const* a, char const* b) const
                 {
-                    return strcmp(a, b) < 0;
+                    return strcmp_P(a, b) < 0;
                 }
             };
             using KeyValueMap = std::map<const char*, const char*, CompareKey>;
@@ -585,7 +585,7 @@ namespace MDNSImplementation
                      = p_pMDNSResponder._answerKeyValue(p_hServiceQuery, p_u32AnswerIndex);
                      pTxt; pTxt = pTxt->m_pNext)
                 {
-                    if ((key) && (0 == strcmp(pTxt->m_pcKey, key)))
+                    if ((key) && (0 == strcmp_P(pTxt->m_pcKey, key)))
                     {
                         result = pTxt->m_pcValue;
                         break;

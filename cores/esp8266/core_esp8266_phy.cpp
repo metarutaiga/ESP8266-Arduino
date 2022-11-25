@@ -30,7 +30,7 @@
 
 extern "C" {
 
-static const uint8_t ICACHE_FLASH_ATTR phy_init_data[128] =
+static const uint8_t phy_init_data[128] PROGMEM =
 {
     /*[0] =*/ 5,  // Reserved, do not change
     /*[1] =*/ 8,  // Reserved, do not change
@@ -309,7 +309,7 @@ extern int IRAM_ATTR __wrap_spi_flash_read(uint32_t addr, uint32_t* dst, size_t 
         return __real_spi_flash_read(addr, dst, size);
     }
 
-    memcpy(dst, phy_init_data, sizeof(phy_init_data));
+    memcpy_P(dst, phy_init_data, sizeof(phy_init_data));
     ((uint8_t*)dst)[107] = __get_adc_mode();
     return 0;
 }

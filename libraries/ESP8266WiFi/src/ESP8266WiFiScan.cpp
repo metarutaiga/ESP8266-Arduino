@@ -270,7 +270,7 @@ String ESP8266WiFiScanClass::BSSIDstr(uint8_t i) {
     if(!it) {
         return String("");
     }
-    sprintf(mac, "%02X:%02X:%02X:%02X:%02X:%02X", it->bssid[0], it->bssid[1], it->bssid[2], it->bssid[3], it->bssid[4], it->bssid[5]);
+    sprintf_P(mac, PSTR("%02X:%02X:%02X:%02X:%02X:%02X"), it->bssid[0], it->bssid[1], it->bssid[2], it->bssid[3], it->bssid[4], it->bssid[5]);
     return String(mac);
 }
 
