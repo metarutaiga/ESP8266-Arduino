@@ -29,14 +29,14 @@ patchFile() {
 	LENGTH=$3 # DO NOT PASS AS HEX!
 	EXPECTED=$4
 	REPLACEWITH=$5
-	if [[ "$(dd if=$FILE bs=1 count=$LENGTH skip=$ADDRESS status=none | base64)" = "$EXPECTED" ]]; then
+	if [[ "$(dd if=$FILE bs=1 count=$LENGTH skip=$ADDRESS status=none | base64 -w0)" = "$EXPECTED" ]]; then
 		echo "Patching  $VERSION $1 ..."
 		echo $5 | base64 -d | dd of=$FILE bs=1 count=$LENGTH seek=$ADDRESS conv=notrunc
-	elif ! [[ "$(dd if=$FILE bs=1 count=$LENGTH skip=$ADDRESS status=none | base64)" = "$REPLACEWITH" ]]; then
+	elif ! [[ "$(dd if=$FILE bs=1 count=$LENGTH skip=$ADDRESS status=none | base64 -w0)" = "$REPLACEWITH" ]]; then
 		echo "PATCH FAILED!"
-		echo "dd if=$FILE bs=1 count=$LENGTH skip=$ADDRESS status=none | base64"
+		echo "dd if=$FILE bs=1 count=$LENGTH skip=$ADDRESS status=none | base64 -w0"
 		dd if=$FILE bs=1 count=$LENGTH skip=$ADDRESS status=none | hexdump -C
-		dd if=$FILE bs=1 count=$LENGTH skip=$ADDRESS status=none | base64
+		dd if=$FILE bs=1 count=$LENGTH skip=$ADDRESS status=none | base64 -w0
 		echo ""
 		exit 1
 	fi
@@ -81,10 +81,12 @@ elif [[ ${VERSION} == "NONOSDK22x"* ]]; then
 	addSymbol_system_func1 "0x54"
 	patchFile "eap.o" "3059" "2" "wAA=" "8CA=" # WPA2-Enterprise patch which replaces a double-free with nop, see #8082
 	patchFile "eap.o" "26356" "9" "dlBvcnRGcmVl" "ejJFYXBGcmVl"   # special vPortFree to recover leaked memory
-#elif [[ ${VERSION} == "NONOSDK3"* ]]; then
-#	addSymbol_system_func1 "0x60"
-#	patchFile "eap.o" "3059" "2" "wAA=" "8CA=" # WPA2-Enterprise patch which replaces a double-free with nop, see #8082
-#	patchFile "eap.o" "26356" "9" "dlBvcnRGcmVl" "ejJFYXBGcmVl"   # special vPortFree to recover leaked memory
+elif [[ ${VERSION} == "NONOSDK3V0"* ]]; then
+	addSymbol_system_func1 "0x60"
+	patchFile "eap.o" "3059" "2" "wAA=" "8CA=" # WPA2-Enterprise patch which replaces a double-free with nop, see #8082
+	patchFile "eap.o" "26356" "9" "dlBvcnRGcmVl" "ejJFYXBGcmVl"   # special vPortFree to recover leaked memory
+elif [[ ${VERSION} == "NONOSDK3"* ]]; then
+	addSymbol_system_func1 "0x54"
 else
 	echo "WARN: Unknown address for system_func1() called by system_restart_local()"
 fi
