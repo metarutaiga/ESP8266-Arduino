@@ -77,7 +77,7 @@ SECTIONS
   .data : ALIGN(4)
   {
     _data_start = ABSOLUTE(.);
-    *(.data)
+    *(EXCLUDE_FILE (lib_a-locale.o ieee80211_input.o) .data)
     *(.data.*)
     *(.gnu.linkonce.d.*)
     *(.data1)
@@ -154,6 +154,7 @@ SECTIONS
     __crc_val = ABSOLUTE(.);
     LONG(0x00000000);
 
+    *(.sdk.version)
     *(.ver_number)
     *.c.o(.literal* .text*)
     *.cpp.o(EXCLUDE_FILE (umm_malloc.cpp.o) .literal* EXCLUDE_FILE (umm_malloc.cpp.o) .text*)
@@ -163,6 +164,7 @@ SECTIONS
 #endif
 
 #ifdef VTABLES_IN_FLASH
+    . = (. + 3) & ~ 3;
     /*  C++ constructor and destructor tables, properly ordered:  */
     __init_array_start = ABSOLUTE(.);
     KEEP (*crtbegin.o(.ctors))
@@ -174,12 +176,29 @@ SECTIONS
     KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
     KEEP (*(SORT(.dtors.*)))
     KEEP (*(.dtors))
+    /*  C++ exception handlers table:  */
+    __XT_EXCEPTION_DESCS__ = ABSOLUTE(.);
+    *(.xt_except_desc)
+    *(.gnu.linkonce.h.*)
+    __XT_EXCEPTION_DESCS_END__ = ABSOLUTE(.);
+    *(.xt_except_desc_end)
+    *(.dynamic)
+    *(.gnu.version_d)
+    . = ALIGN(4);       /* this table MUST be 4-byte aligned */
+    _bss_table_start = ABSOLUTE(.);
+    LONG(_bss_start)
+    LONG(_bss_end)
+    _bss_table_end = ABSOLUTE(.);
 #endif
 
     *libgcc.a:unwind-dw2.o(.literal .text .rodata .literal.* .text.* .rodata.*)
     *libgcc.a:unwind-dw2-fde.o(.literal .text .rodata .literal.* .text.* .rodata.*)
 
     *libc.a:(.literal .text .literal.* .text.*)
+    *libc.a:lib_a-impure.o(.literal .text .literal.* .text.* .rodata)
+    *libc.a:lib_a-lnumeric.o(.literal .text .literal.* .text.* .rodata)
+    *libc.a:lib_a-nano-vfscanf_i.o(.literal .text .literal.* .text.* .rodata)
+    *libc.a:lib_a-locale.o(.literal .text .literal.* .text.* .rodata .data)
     *libm.a:(.literal .text .literal.* .text.*)
 #ifdef FP_IN_IROM
     *libgcc.a:*f2.o(.literal .text)
@@ -200,7 +219,7 @@ SECTIONS
     *libsmartconfig.a:(.literal .text .literal.* .text.*)
     *liblwip_gcc.a:(.literal .text .literal.* .text.*)
     *liblwip_src.a:(.literal .text .literal.* .text.*)
-    *liblwip2-536.a:(.literal .text .literal.* .text.*)
+    *liblwip2-536.a:(.literal .text .literal.* .text.* .rodata.memp_pools .rodata.tcp_pcb_lists)
     *liblwip2-1460.a:(.literal .text .literal.* .text.*)
     *liblwip2-536-feat.a:(.literal .text .literal.* .text.*)
     *liblwip2-1460-feat.a:(.literal .text .literal.* .text.*)
@@ -214,6 +233,9 @@ SECTIONS
     *liblwip.a:(.literal.* .text.*)
     *libmesh.a:(.literal.* .text.*)
     *libnet80211.a:(.literal.* .text.*)
+    *libnet80211.a:ieee80211_input.o(.literal .text .literal.* .text.* .rodata .data)
+    *libphy.a:(.literal.* .text.*)
+    *libphy.a:phy_chip_v6.o(.literal.* .text.* .rodata.str1.4)
     *libsmartconfig.a:(.literal.* .text.*)
     *libssl.a:(.literal.* .text.*)
     *libupgrade.a:(.literal.* .text.*)
@@ -242,6 +264,8 @@ SECTIONS
 
     /* Fundamental type info */
     *(.rodata._ZTIPKc .rodata._ZTIc .rodata._ZTIv .rodata._ZTSv .rodata._ZTSc .rodata._ZTSPKc .rodata._ZTSi .rodata._ZTIi)
+
+    *(.rodata._ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag)
 
     . = ALIGN(4);
     *(.gcc_except_table .gcc_except_table.*)
