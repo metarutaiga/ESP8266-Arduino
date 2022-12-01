@@ -813,7 +813,7 @@ void HTTPClient::addHeader(const String& name, const String& value, bool first, 
         }
 
         headerLine += value;
-        headerLine += "\r\n";
+        headerLine += F("\r\n");
         if (first) {
             _headers = headerLine + _headers;
         } else {
@@ -961,10 +961,10 @@ bool HTTPClient::sendHeader(const char * type)
 
     header += F("\r\nConnection: ");
     header += _reuse ? F("keep-alive") : F("close");
-    header += "\r\n";
+    header += F("\r\n");
 
     header += _headers;
-    header += "\r\n";
+    header += F("\r\n");
 
     DEBUG_HTTPCLIENT("[HTTP-Client] sending request header\n-----\n%s-----\n", header.c_str());
 

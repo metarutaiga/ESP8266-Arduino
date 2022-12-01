@@ -251,6 +251,7 @@ namespace brssl {
     pem_object po, *pos;
     const unsigned char *buff;
     std::vector<uint8_t> bv;
+    unsigned char ln[2];
 
     *num = 0;
     br_pem_decoder_init(pc.get());
@@ -305,8 +306,11 @@ namespace brssl {
       }
 
       if (len == 0 && extra_nl) {
+        ln[0] = '\n';
+        ln[1] = 0;
+
         extra_nl = false;
-        buff = (const unsigned char *)"\n";
+        buff = ln;
         len = 1;
       }
     }

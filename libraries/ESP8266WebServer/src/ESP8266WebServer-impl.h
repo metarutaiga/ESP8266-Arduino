@@ -401,7 +401,7 @@ void ESP8266WebServerTemplate<ServerType>::sendHeader(const String& name, const 
   String headerLine = name;
   headerLine += F(": ");
   headerLine += value;
-  headerLine += "\r\n";
+  headerLine += F("\r\n");
 
   if (first) {
     _responseHeaders = headerLine + _responseHeaders;
@@ -422,7 +422,7 @@ void ESP8266WebServerTemplate<ServerType>::_prepareHeader(String& response, int 
     response += String(code);
     response += ' ';
     response += responseCodeToString(code);
-    response += "\r\n";
+    response += F("\r\n");
 
     using namespace mime;
     if (!content_type)
@@ -453,7 +453,7 @@ void ESP8266WebServerTemplate<ServerType>::_prepareHeader(String& response, int 
 
 
     response += _responseHeaders;
-    response += "\r\n";
+    response += F("\r\n");
     _responseHeaders = "";
 }
 

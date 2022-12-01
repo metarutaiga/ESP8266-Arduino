@@ -42,9 +42,9 @@
 class DhcpServer
 {
 public:
-    static constexpr int    DefaultLeaseTime = 720;         // minutes
-    static constexpr uint32 MagicCookie      = 0x63538263;  // https://tools.ietf.org/html/rfc1497
-                                                            //
+    static constexpr int DefaultLeaseTime PROGMEM = 720;        // minutes
+    static constexpr uint32 MagicCookie PROGMEM   = 0x63538263; // https://tools.ietf.org/html/rfc1497
+                                                                //
     struct OptionsBuffer
     {
         OptionsBuffer(uint8_t* begin, uint8_t* end) : _it(begin), _begin(begin), _end(end) { }
