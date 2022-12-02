@@ -77,7 +77,9 @@ SECTIONS
   .data : ALIGN(4)
   {
     _data_start = ABSOLUTE(.);
+#if 0//ndef FREE_MORE_DRAM
     *(.data)
+#endif
     *(.data.*)
     *(.gnu.linkonce.d.*)
     *(.data1)
@@ -250,7 +252,7 @@ SECTIONS
     /* std::make_shared */
     *(.rodata._ZZNSt19_Sp_make_shared_tag5_S_tiEvE5__tag)
 
-#ifdef FREE_MORE_DRAM
+#if 1//def FREE_MORE_DRAM
     *(.sdk.version)
     *libc.a:lib_a-dtoa.o                (.rodata .rodata.*)
     *libc.a:lib_a-gdtoa-gethex.o        (.rodata .rodata.*)
@@ -271,8 +273,7 @@ SECTIONS
     *libc.a:lib_a-tzvars.o              (.rodata .rodata.*)
     *liblwip2-536.a:                    (.rodata .rodata.memp_pools .rodata.tcp_pcb_lists .rodata.dns_mquery_v4group .rodata.ip_addr_broadcast .rodata.ip_addr_any)
     *liblwip2-1460.a:                   (.rodata .rodata.memp_pools .rodata.tcp_pcb_lists .rodata.dns_mquery_v4group .rodata.ip_addr_broadcast .rodata.ip_addr_any)
-    *libnet80211.a:ieee80211_input.o    (.rodata .rodata.* .data)
-    *libnet80211.a:ieee80211_scan.o     (.rodata .rodata.* .data)
+    *libnet80211.a:ieee80211_input.o    (.rodata .rodata.* .data) 
     *libphy.a:phy_chip_v6.o             (.rodata .rodata.*)
     *libpp.a:esf_buf.o                  (.rodata .rodata.*)
 #endif
