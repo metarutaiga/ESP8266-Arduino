@@ -177,7 +177,7 @@ void configTime(int timezone_sec, int daylightOffset_sec, const char* server1, c
 
     *** hack starts here: ***/
 
-    static char gmt[] = "GMT";
+    static char gmt[] PROGMEM = "GMT";
 
     _timezone = timezone_sec + daylightOffset_sec;
     _daylight = 0;

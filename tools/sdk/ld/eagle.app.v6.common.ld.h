@@ -195,10 +195,7 @@ SECTIONS
     *libgcc.a:unwind-dw2-fde.o(.literal .text .rodata .literal.* .text.* .rodata.*)
 
     *libc.a:(.literal .text .literal.* .text.*)
-    *libc.a:lib_a-impure.o(.literal .text .literal.* .text.* .rodata)
-    *libc.a:lib_a-lnumeric.o(.literal .text .literal.* .text.* .rodata)
-    *libc.a:lib_a-nano-vfscanf_i.o(.literal .text .literal.* .text.* .rodata)
-    *libc.a:lib_a-locale.o(.literal .text .literal.* .text.* .rodata .data)
+
     *libm.a:(.literal .text .literal.* .text.*)
 #ifdef FP_IN_IROM
     *libgcc.a:*f2.o(.literal .text)
@@ -219,7 +216,7 @@ SECTIONS
     *libsmartconfig.a:(.literal .text .literal.* .text.*)
     *liblwip_gcc.a:(.literal .text .literal.* .text.*)
     *liblwip_src.a:(.literal .text .literal.* .text.*)
-    *liblwip2-536.a:(.literal .text .literal.* .text.* .rodata.memp_pools .rodata.tcp_pcb_lists)
+    *liblwip2-536.a:(.literal .text .literal.* .text.* .rodata.memp_pools .rodata.tcp_pcb_lists .rodata.dns_mquery_v4group .rodata.ip_addr_broadcast .rodata.ip_addr_any)
     *liblwip2-1460.a:(.literal .text .literal.* .text.*)
     *liblwip2-536-feat.a:(.literal .text .literal.* .text.*)
     *liblwip2-1460-feat.a:(.literal .text .literal.* .text.*)
@@ -233,7 +230,6 @@ SECTIONS
     *liblwip.a:(.literal.* .text.*)
     *libmesh.a:(.literal.* .text.*)
     *libnet80211.a:(.literal.* .text.*)
-    *libnet80211.a:ieee80211_input.o(.literal .text .literal.* .text.* .rodata .data)
     *libphy.a:(.literal.* .text.*)
     *libphy.a:phy_chip_v6.o(.literal.* .text.* .rodata.str1.4)
     *libsmartconfig.a:(.literal.* .text.*)
@@ -242,6 +238,33 @@ SECTIONS
     *libwpa.a:(.literal.* .text.*)
     *libwpa2.a:(.literal.* .text.*)
     *libwps.a:(.literal.* .text.*)
+
+    *libc.a:lib_a-impure.o(.literal .text .literal.* .text.* .rodata)
+    *libc.a:lib_a-lnumeric.o(.literal .text .literal.* .text.* .rodata)
+    *libc.a:lib_a-nano-vfscanf_i.o(.literal .text .literal.* .text.* .rodata)
+    *libc.a:lib_a-locale.o(.literal .text .literal.* .text.* .rodata .data)
+
+    *libc.a:lib_a-lcltime.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-nano-vfprintf_float.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-nano-vfscanf_float.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-rand.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-strtod.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-tzset_r.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-tzvars.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-dtoa.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-gdtoa-gethex.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-lnumeric.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-locale.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-mprec.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-nano-svfprintf.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-nano-svfscanf.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-nano-vfprintf.o(.literal .text .literal.* .text.* .rodata.*)
+    *libc.a:lib_a-nano-vfscanf_i.o(.literal .text .literal.* .text.* .rodata.*)
+
+    *libnet80211.a:ieee80211_input.o(.literal .text .literal.* .text.* .rodata .data)
+    *libnet80211.a:ieee80211_scan.o(.literal .text .literal.* .text.* .rodata .data)
+    *libpp.a:esf_buf.o(.literal .text .rodata .literal.* .text.* .rodata.*)
+
     *(.irom0.literal .irom.literal .irom.text.literal .irom0.text .irom0.text.* .irom.text .irom.text.*)
 
     /* Constant strings in flash (PSTRs) */
