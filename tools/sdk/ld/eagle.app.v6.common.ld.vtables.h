@@ -1,6 +1,7 @@
   .rodata : ALIGN(4)
   {
     _rodata_start = ABSOLUTE(.);
+    *(.sdk.version)
     *(.rodata)
     *(.rodata.*)
     *(.gnu.linkonce.r.*)
@@ -11,19 +12,7 @@
     *(.gnu.linkonce.e.*)
     *(.gnu.version_r)
     *(.eh_frame)
-#ifndef VTABLES_IN_FLASH
-    . = (. + 3) & ~ 3;
-    /*  C++ constructor and destructor tables, properly ordered:  */
-    __init_array_start = ABSOLUTE(.);
-    KEEP (*crtbegin.o(.ctors))
-    KEEP (*(EXCLUDE_FILE (*crtend.o) .ctors))
-    KEEP (*(SORT(.ctors.*)))
-    KEEP (*(.ctors))
-    __init_array_end = ABSOLUTE(.);
-    KEEP (*crtbegin.o(.dtors))
-    KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
-    KEEP (*(SORT(.dtors.*)))
-    KEEP (*(.dtors))
+    . = ALIGN(4);
     /*  C++ exception handlers table:  */
     __XT_EXCEPTION_DESCS__ = ABSOLUTE(.);
     *(.xt_except_desc)
@@ -32,12 +21,6 @@
     *(.xt_except_desc_end)
     *(.dynamic)
     *(.gnu.version_d)
-    . = ALIGN(4);       /* this table MUST be 4-byte aligned */
-    _bss_table_start = ABSOLUTE(.);
-    LONG(_bss_start)
-    LONG(_bss_end)
-    _bss_table_end = ABSOLUTE(.);
-#endif
     _rodata_end = ABSOLUTE(.);
   } >dram0_0_seg :dram0_0_phdr
 
