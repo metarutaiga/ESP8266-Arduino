@@ -252,10 +252,11 @@ SECTIONS
 
     *(.sdk.version)
     *libc.a:lib_a-dtoa.o                (.rodata .rodata.*)
+    *libc.a:lib_a-environ.o             (.rodata .rodata.* .data)
     *libc.a:lib_a-gdtoa-gethex.o        (.rodata .rodata.*)
     *libc.a:lib_a-impure.o              (.rodata .rodata.*)
     *libc.a:lib_a-lcltime.o             (.rodata .rodata.*)
-    *libc.a:lib_a-lnumeric.o            (.rodata .rodata.*)
+    *libc.a:lib_a-lnumeric.o            (.rodata .rodata.* .data)
     *libc.a:lib_a-locale.o              (.rodata .rodata.* .data)
     *libc.a:lib_a-mprec.o               (.rodata .rodata.*)
     *libc.a:lib_a-nano-svfprintf.o      (.rodata .rodata.*)
@@ -272,7 +273,9 @@ SECTIONS
     *liblwip2-1460.a:                   (.rodata .rodata.memp_pools .rodata.tcp_pcb_lists .rodata.dns_mquery_v4group .rodata.ip_addr_broadcast .rodata.ip_addr_any)
     *libnet80211.a:ieee80211_input.o    (.rodata .rodata.* .data) 
     *libphy.a:phy_chip_v6.o             (.rodata .rodata.*)
+    *libphy.a:phy_sleep.o               (.rodata .rodata.*)
     *libpp.a:esf_buf.o                  (.rodata .rodata.*)
+    *libwpa.a:wpa.o                     (.rodata .rodata.*)
 
     . = ALIGN(4);
     *(.gcc_except_table .gcc_except_table.*)
